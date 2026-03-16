@@ -1,0 +1,114 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "a70d3686-8a7d-42fd-8766-ad482f20de27",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://official-joke-api.appspot.com/random_joke",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "fcde9a77-5217-407a-89e6-79cf8badbb4a",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Translate this joke to Hindi and also \ncreate one original Hindi dad joke yourself!\n\nSetup: {{ $json.setup }}\nPunchline: {{ $json.punchline }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "10597cd1-19c3-4826-b022-0b1bfc4bc07a",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        288,
+        208
+      ],
+      "id": "f846677c-718e-42c0-80a1-2fc04ac30fa6",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "2o9AeOgNbwR6tuHO",
+          "name": "Groq account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "03689c63-996d-48bf-b73a-9caed66007b4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "79bfbcb9ab3fa3e1727eb582f2eb86883b8ff7a72bb4b5ec4b4b7a68c69bd683"
+  },
+  "id": "eZrVKR7VpVo0YZTV",
+  "tags": []
+}
